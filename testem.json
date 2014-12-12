@@ -12,6 +12,6 @@
   	"Chrome"
   ],
   "launch_in_ci": [
-    "PhantomJS"
+    "Chrome"
   ]
 }
