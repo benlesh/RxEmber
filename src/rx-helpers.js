@@ -34,9 +34,15 @@
   @return {Function}
 */
 function rxAction(outputProperty) {
+  var subject;
+
   return function(){
+    if(!subject) {
+      subject = new Rx.Subject();
+      this.set(outputProperty, subject);
+    }
     var args = [].slice.call(arguments);
-    this.set(outputProperty, Rx.Observable.just(args));
+    subject.onNext(args);
   };
 }
 
