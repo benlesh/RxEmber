@@ -1,5 +1,5 @@
 {
-  "framework": "jasmine",
+  "framework": "jasmine2",
   "src_files": [
   	"bower_components/jquery/dist/jquery.js",
   	"bower_components/handlebars/handlebars.js",

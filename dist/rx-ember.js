@@ -157,7 +157,7 @@
       
       return function(key, val){
         if(!this[backingField]) {
-          this[backingField] = new Rx.Subject();
+          this[backingField] = new Rx.BehaviorSubject();
         }    
         
         if(arguments.length > 1) {

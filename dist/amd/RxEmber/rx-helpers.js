@@ -28,7 +28,7 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
     
     return function(key, val){
       if(!this[backingField]) {
-        this[backingField] = new Rx.Subject();
+        this[backingField] = new Rx.BehaviorSubject();
       }    
       
       if(arguments.length > 1) {
