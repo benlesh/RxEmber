@@ -2,6 +2,8 @@
 
 var rxInput = RxEmber.rxInput;
 var rxFilter = RxEmber.rxFilter;
+var rxMap = RxEmber.rxMap;
+var rxScan = RxEmber.rxScan;
 
 describe('helpers', function(){
 	describe('rxInput', function(){
@@ -58,6 +60,62 @@ describe('helpers', function(){
 			var i = 0;
 
 			foo.get('filtered').forEach(function(n) {
+				expect(n).toBe(expectedResults[i++]);
+
+				if(i === expectedResults.length) {
+					done();
+				}
+			});
+		})
+	});
+
+
+	describe('rxMap', function(){
+		it('should map another observable property', function(done){
+			var expectedResults = ['a1', 'a2', 'a3', 'a4', 'a5'];
+
+			var FooClass = Ember.Object.extend({
+				source: function(){
+					return Rx.Observable.fromArray([1,2,3,4,5]);
+				}.property(),
+
+				mapped: rxMap('source', function(n) {
+					return 'a' + n;
+				}),
+			});
+
+			var foo = FooClass.create();
+			var i = 0;
+
+			foo.get('mapped').forEach(function(n) {
+				expect(n).toBe(expectedResults[i++]);
+
+				if(i === expectedResults.length) {
+					done();
+				}
+			});
+		})
+	});
+
+
+	describe('rxScan', function(){
+		it('should perform a scan on another observable property', function(done){
+			var expectedResults = [1, 3, 6, 10, 15];
+
+			var FooClass = Ember.Object.extend({
+				source: function(){
+					return Rx.Observable.fromArray([1,2,3,4,5]);
+				}.property(),
+
+				accumulated: rxScan('source', 0, function(acc, n) {
+					return acc + n;
+				}),
+			});
+
+			var foo = FooClass.create();
+			var i = 0;
+
+			foo.get('accumulated').forEach(function(n) {
 				expect(n).toBe(expectedResults[i++]);
 
 				if(i === expectedResults.length) {
