@@ -14,6 +14,8 @@
   "license": "MIT",
   "devDependencies": {
     "broccoli": "^0.13.3",
-    "broccoli-es6-concatenator": "^0.1.11"
+    "broccoli-compile-modules": "^1.1.0",
+    "broccoli-merge-trees": "^0.2.1",
+    "es6-module-transpiler-amd-formatter": "^0.2.4"
   }
 }

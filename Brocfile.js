@@ -1,17 +1,23 @@
-var compileES6 = require('broccoli-es6-concatenator');
+var AMDFormatter 			= require('es6-module-transpiler-amd-formatter');
+var compileModules 		= require('broccoli-compile-modules');
+var mergeTrees 				= require('broccoli-merge-trees');
 
-var wrapInEval = !process.env.PRODUCTION_BUILD;
+var buildTrees = [];
 
-var appTree = compileES6('src', {
-  inputFiles: [
-    '**/*.js'
-  ],
-  ignoredModules: [
-    'ember'
-  ],
-  wrapInEval: wrapInEval,
-  outputFile: '/rx.ember.js'
+var bundle = compileModules('lib', {
+  inputFiles: ['rx-ember.umd.js'],
+  output: '/rx-ember.js',
+  formatter: 'bundle',
 });
 
+buildTrees.push(bundle);
 
-module.exports = appTree;
+buildTrees.push(compileModules('lib', {
+  inputFiles: ['**/*.js'],
+  output: '/amd/',
+  formatter: new AMDFormatter()
+}));
+
+var buildTree = mergeTrees(buildTrees);
+
+module.exports = buildTree;
