@@ -1,0 +1,15 @@
+{
+  "name": "RxEmber",
+  "version": "0.0.0",
+  "description": "Helpers for RxJS and EmberJS integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "EmberJS",
+    "RxJS"
+  ],
+  "author": "Ben Lesh <ben@benlesh.com>",
+  "license": "MIT"
+}
