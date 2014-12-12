@@ -5,6 +5,7 @@ var rxFilter 					= RxEmber.rxFilter;
 var rxMap 						= RxEmber.rxMap;
 var rxScan 						= RxEmber.rxScan;
 var rxPropertyChanges = RxEmber.rxPropertyChanges;
+var rxAction 					= RxEmber.rxAction;
 
 describe('helpers', function(){
 	describe('rxInput', function(){
@@ -67,7 +68,7 @@ describe('helpers', function(){
 					done();
 				}
 			});
-		})
+		});
 	});
 
 
@@ -95,7 +96,7 @@ describe('helpers', function(){
 					done();
 				}
 			});
-		})
+		});
 	});
 
 
@@ -123,7 +124,7 @@ describe('helpers', function(){
 					done();
 				}
 			});
-		})
+		});
 	});
 
 	describe('rxPropertyChanges', function() {
@@ -151,4 +152,48 @@ describe('helpers', function(){
 			foo.set('name', 'Ranjit');
 		});
 	});
+
+	describe('rxAction', function(){
+		it('should create an observable of action arguments', function(done) {
+			var expectedResults = [
+				[1,2,3],
+				['foo', 'bar', 'baz'],
+				['Ocelot', 'buyer\'s', 'remorse']
+			];
+
+			var FooController = Ember.ObjectController.extend({
+				doSomethings: rxInput(),
+
+				actions: {
+					doSomething: rxAction('doSomethings')
+				}
+			});
+
+			var ctrl = FooController.create({});
+			var i = 0;
+			
+			ctrl.get('doSomethings').forEach(function(args) {
+				expect(args).toEqual(expectedResults[i++]);
+
+				if(i === expectedResults.length) {
+					done();
+				}
+			});
+
+			Ember.run(function(){
+				ctrl.send('doSomething', 1, 2, 3);
+			});
+			Ember.run(function(){
+				ctrl.send('doSomething', 'foo', 'bar', 'baz');
+			});
+			Ember.run(function(){
+				ctrl.send('doSomething', 'Ocelot', 'buyer\'s', 'remorse');
+			});
+		});
+	});
 });
+
+
+
+
+
