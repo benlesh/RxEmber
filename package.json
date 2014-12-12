@@ -5,7 +5,7 @@
   "description": "Helpers for RxJS and EmberJS integration",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "testem ci",
     "build": "rm -rf dist && broccoli build dist",
     "prepublish": "rm -rf dist && export BUILD_ENV=production && broccoli build dist && unset BUILD_ENV"
   },
