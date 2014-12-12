@@ -1,9 +1,10 @@
 /* globals Ember, Rx, RxEmber */
 
-var rxInput = RxEmber.rxInput;
-var rxFilter = RxEmber.rxFilter;
-var rxMap = RxEmber.rxMap;
-var rxScan = RxEmber.rxScan;
+var rxInput 					= RxEmber.rxInput;
+var rxFilter 					= RxEmber.rxFilter;
+var rxMap 						= RxEmber.rxMap;
+var rxScan 						= RxEmber.rxScan;
+var rxPropertyChanges = RxEmber.rxPropertyChanges;
 
 describe('helpers', function(){
 	describe('rxInput', function(){
@@ -123,5 +124,31 @@ describe('helpers', function(){
 				}
 			});
 		})
+	});
+
+	describe('rxPropertyChanges', function() {
+		it('should observe property changes and emit them via an observable', function(done) {
+			var expectedResults = ['Ben', 'Jeff', 'Ranjit'];
+
+			var FooClass = Ember.Object.extend({
+				name: null,
+
+				names: rxPropertyChanges('name'),
+			});
+
+			var foo = FooClass.create();
+			var i = 0;
+
+			foo.get('names').forEach(function(x) {
+				expect(x).toBe(expectedResults[i++]);
+				if(i === expectedResults.length) {
+					done();
+				}
+			});
+
+			foo.set('name', 'Ben');
+			foo.set('name', 'Jeff');
+			foo.set('name', 'Ranjit');
+		});
 	});
 });
