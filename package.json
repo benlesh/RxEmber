@@ -11,5 +11,9 @@
     "RxJS"
   ],
   "author": "Ben Lesh <ben@benlesh.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "broccoli": "^0.13.3",
+    "broccoli-es6-concatenator": "^0.1.11"
+  }
 }

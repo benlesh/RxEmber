@@ -1,0 +1,29 @@
+{
+  "name": "RxEmber",
+  "version": "0.0.0",
+  "authors": [
+    "Ben Lesh <ben@benlesh.com>"
+  ],
+  "description": "Helper library for EmberJS and RxJS integration",
+  "main": "dist/rx.ember.js",
+  "moduleType": [
+    "amd",
+    "es6"
+  ],
+  "keywords": [
+    "EmberJS",
+    "RxJS"
+  ],
+  "license": "MIT",
+  "homepage": "http://github.com/blesh/RxEmber",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ember": "~1.9.0"
+  }
+}

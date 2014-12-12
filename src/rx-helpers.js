@@ -128,7 +128,7 @@ function rxMap(sourceProp, callback) {
 function rxScan(sourceProp, start, callback) {
   return function(){
   	return this.get(sourceProp).scan(start, callback.bind(this));
-  }.property(sourceProp),
+  }.property(sourceProp);
 }
 
 /**
@@ -193,3 +193,5 @@ function rxPropertyChanges(propName) {
     }.bind(this));
   }.property();
 }
+
+
