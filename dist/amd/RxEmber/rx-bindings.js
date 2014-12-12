@@ -95,12 +95,12 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
     //TODO: better explanation of config object.
     /**
       Creates a subscription from the source (observable) property, to update the target property
-      @method addRxBinding
+      @method addRxSubscription
       @param source {string} the name of the observable property to subscribe to
       @param target {string|Object} the name of the property to update, or a configuration object.
       @return {Rx.Disposable} the rx disposable to remove the binding (unsubscribe).
     */
-    addRxBinding: function(source, target) {
+    addRxSubscription: function(source, target) {
       var sourceObs = this.get(source);
       if(!sourceObs) {
         return;
@@ -125,7 +125,7 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
     },
 
     /**
-      Creates subscriptions from all items in `rxBindings` using `addRxBinding`.
+      Creates subscriptions from all items in `rxBindings` using `addRxSubscription`.
       @method subscribe
     */
     subscribe: function(){
@@ -134,7 +134,7 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
       if(rxBindings) {
         Ember.keys(rxBindings).forEach(function(source) {
           var target = rxBindings[source];
-          this.addRxBinding.call(this, source, target);
+          this.addRxSubscription.call(this, source, target);
         }, this);
       }
       this.didSubscribe.apply(this);

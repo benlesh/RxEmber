@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rm -rf dist && broccoli build dist",
-    "prepublish": "rm -rf dist && export BUILD_ENV=production && broccoli build dist && unset BUILD_ENV",
-    "poop": "echo \"poop\" && exit 1"
+    "prepublish": "rm -rf dist && export BUILD_ENV=production && broccoli build dist && unset BUILD_ENV"
   },
   "keywords": [
     "EmberJS",
