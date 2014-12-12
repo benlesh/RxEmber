@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "testem ci",
-    "build": "rm -rf dist && broccoli build dist",
-    "prepublish": "rm -rf dist && export BUILD_ENV=production && broccoli build dist && unset BUILD_ENV"
+    "build": "ember build",
+    "prepublish": "export BUILD_ENV=production && ember build"
   },
   "keywords": [
     "EmberJS",
@@ -21,6 +21,7 @@
     "broccoli-merge-trees": "^0.2.1",
     "es6-module-transpiler-amd-formatter": "^0.2.4",
     "broccoli-closure-compiler": "^1.0.0",
-    "broccoli-file-mover": "^0.4.2"
+    "broccoli-file-mover": "^0.4.2",
+    "ember-cli": "^0.1.4"
   }
 }
