@@ -133,7 +133,7 @@
           }, this);
         }
         this.didSubscribe.apply(this);
-      },
+      }
     });
 
     function $$RxEmber$rx$helpers$$rxAction(outputProperty) {
@@ -165,7 +165,7 @@
           this[backingField].onNext(next);
         }
           
-        return this[backingField].switch();
+        return this[backingField]['switch']();
       }.property();
     }
 
@@ -212,7 +212,7 @@
         rxFilter: $$RxEmber$rx$helpers$$rxFilter,
         rxScan: $$RxEmber$rx$helpers$$rxScan,
         rxAction: $$RxEmber$rx$helpers$$rxAction,
-        rxPropertyChanges: $$RxEmber$rx$helpers$$rxPropertyChanges,
+        rxPropertyChanges: $$RxEmber$rx$helpers$$rxPropertyChanges
     };
 
     /* global define:true module:true window: true */

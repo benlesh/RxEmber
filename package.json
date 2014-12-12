@@ -4,7 +4,10 @@
   "description": "Helpers for RxJS and EmberJS integration",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf dist && broccoli build dist",
+    "prepublish": "rm -rf dist && export BUILD_ENV=production && broccoli build dist && unset BUILD_ENV",
+    "poop": "echo \"poop\" && exit 1"
   },
   "keywords": [
     "EmberJS",
@@ -16,6 +19,8 @@
     "broccoli": "^0.13.3",
     "broccoli-compile-modules": "^1.1.0",
     "broccoli-merge-trees": "^0.2.1",
-    "es6-module-transpiler-amd-formatter": "^0.2.4"
+    "es6-module-transpiler-amd-formatter": "^0.2.4",
+    "broccoli-closure-compiler": "^1.0.0",
+    "broccoli-file-mover": "^0.4.2"
   }
 }

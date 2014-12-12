@@ -30,7 +30,7 @@ define(
         rxFilter: rxFilter,
         rxScan: rxScan,
         rxAction: rxAction,
-        rxPropertyChanges: rxPropertyChanges,
+        rxPropertyChanges: rxPropertyChanges
     };
 
     /* global define:true module:true window: true */

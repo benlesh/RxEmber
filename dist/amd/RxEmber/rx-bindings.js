@@ -138,7 +138,7 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
         }, this);
       }
       this.didSubscribe.apply(this);
-    },
+    }
   }));
 });
 

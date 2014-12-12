@@ -36,7 +36,7 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
         this[backingField].onNext(next);
       }
         
-      return this[backingField].switch();
+      return this[backingField]['switch']();
     }.property();
   }
 
