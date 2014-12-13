@@ -20,7 +20,7 @@ buildTrees.push(compileModules('lib', {
   formatter: new AMDFormatter()
 }));
 
-if (process.env.BUILD_ENV === 'production') {
+if (process.env.EMBER_ENV === 'production') {
   buildTrees.push(closureCompiler(moveFile(bundle, {
     srcFile: 'rx-ember.js',
     destFile: 'rx-ember.min.js'
