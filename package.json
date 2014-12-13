@@ -5,7 +5,7 @@
   "description": "Helpers for RxJS and EmberJS integration",
   "main": "index.js",
   "scripts": {
-    "test": "testem ci",
+    "test": "testem ci -R dot",
     "build": "ember build",
     "prepublish": "export BUILD_ENV=production && ember build"
   },
