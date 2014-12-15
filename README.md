@@ -100,12 +100,12 @@ myInputProperty: function(key, value) {
 	}
 
   // if "setting" the observable, supply it to the subject
-	if(arguments.length > 1) {
+  if(arguments.length > 1) {
 		this._myInputProperty.onNext(value)
 	}
 
   // return a switched observable of the subject's values
-	return this._myInputProperty.switch();
+  return this._myInputProperty.switch();
 }.property(),
 ```
 
@@ -144,10 +144,22 @@ And here's the view:
 
 From there you can of course write out values using the `RxBindings` mixin.
 
+### rxPropertyChange() helper
+
+`rxPropertyChange` converts observed changes to a property on an Ember object into
+an Observable stream.
+
+```js
+// the property we want to observe
+foo: 0,
+
+// an observable stream of changes to `foo`
+foos: rxPropertyChange('foo'),
+```
 
 ### rxMap() helper
 
-`rxMap(prop)` is used to map one observable property into a new observable property. It's effectivelly
+`rxMap` is used to map one observable property into a new observable property. It's effectivelly
  a shorthand method.
 
 ```js
@@ -178,4 +190,39 @@ this is equivalent to:
 			};
 	  });
 	}.property('intervalStream'),
+```
+
+### rxFilter() helper
+
+`rxFilter` is used to filter one observable property into a new observable property. The semantics are
+similar to rxMap
+
+```js
+	numbers: function(){
+		return Rx.Observable.fromArray([1,2,3,4,5]);
+	}.property(),
+
+	evens: rxFilter('numbers', function(n) {
+		return n % 2 === 0;
+	}),
+```
+
+
+### rxScan() helper
+
+`rxScan` is used to perform an RxJS "scan" on an observable and return a new observable. This is good
+for accumulating data and emitting that accumulation each "next".
+
+```js
+  // emits 1, 2, 3, 4, 5, ...
+	ticks: function(){
+		return Rx.Observable.interval(1000);
+	}.property(),
+
+  // emits 1, 3, 6, 10, 15, ...
+	accumulated: rxScan('ticks', 0, function(acc, n) {
+		acc += n;
+		return acc;
+	}),
+
 ```
