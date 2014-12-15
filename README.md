@@ -83,6 +83,12 @@ Observables.
 Usually any observable input to your component or controller would come through a property
 that uses `rxInput()`.
 
+```js
+myInputProperty: rxInput(),
+```
+
+** Why is this used?
+
 One common issue when trying to develop Ember components that expect Observables to be supplied to them is that 
 Observable inputs might change dynamically, and often they haven't be supplied yet at the point you're subscribing
 to them. 
@@ -90,7 +96,7 @@ to them.
 A way to get around this is by having a property that returns a "switched" Observable. The technicals of this, is that
 you have an Observable of Observables, and you `.switch()` to the latest observable supplied.
 
-The code looks (somewhat) like this:
+The code to duplicate the example above looks (somewhat) like this:
 
 ```js
 myInputProperty: function(key, value) {
@@ -107,15 +113,6 @@ myInputProperty: function(key, value) {
   // return a switched observable of the subject's values
   return this._myInputProperty.switch();
 }.property(),
-```
-
-**But now you don't have to worry about that**
-
-`rxInput()` is a helper method that does this for you. The following code does the same thing
-as the above, and a little more:
-
-```js
-myInputProperty: rxInput(),
 ```
 
 
