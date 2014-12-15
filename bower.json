@@ -21,7 +21,8 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "tmp"
   ],
   "dependencies": {
     "ember": "~1.9.0",
