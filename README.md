@@ -5,6 +5,14 @@ RxEmber
 
 An experimental set of helpers for Ember and RxJS
 
+## Installation
+
+Via Bower:
+
+```sh
+bower install -S rx-ember
+```
+
 ## RxBindings mixin
 
 Binding an observable to a property on an object using the `RxBindings` mixin is a matter
