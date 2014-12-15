@@ -4,14 +4,14 @@
   	"bower_components/jquery/dist/jquery.js",
   	"bower_components/handlebars/handlebars.js",
   	"bower_components/ember/ember.js",
-  	"bower_components/rxjs/dist/rx.all.js",
+    "bower_components/rxjs/dist/rx.all.compat.js",
     "dist/rx-ember.js",
     "test/RxEmber/**/*.js"
   ],
   "launch_in_dev": [
-  	"Chrome"
+  	"PhantomJS"
   ],
   "launch_in_ci": [
-    "Chrome"
+    "PhantomJS"
   ]
 }
