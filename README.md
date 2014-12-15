@@ -39,7 +39,7 @@ App.SomeController = Ember.ObjectController.extend(RxBindings, {
   // a property that returns an observable.
   // in this case, it "ticks" once a second
 	myObservableProperty: function() {
-    return Rx.Observable.interval(1000);
+		return Rx.Observable.interval(1000);
 	}.property(),
 
 	actions: {
@@ -102,12 +102,12 @@ The code to duplicate the example above looks (somewhat) like this:
 myInputProperty: function(key, value) {
   // Make sure there's a BehaviorSubject backing this thing.
   if(!this._myInputProperty) {
-	  this._myInputProperty = new Rx.BehaviorSubject();
+  	this._myInputProperty = new Rx.BehaviorSubject();
 	}
 
   // if "setting" the observable, supply it to the subject
   if(arguments.length > 1) {
-		this._myInputProperty.onNext(value)
+  	this._myInputProperty.onNext(value)
 	}
 
   // return a switched observable of the subject's values
