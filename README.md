@@ -86,8 +86,7 @@ that uses `rxInput()`.
 ```js
 myInputProperty: rxInput(),
 ```
-
-** Why is this used?
+**Why is this used?**
 
 One common issue when trying to develop Ember components that expect Observables to be supplied to them is that 
 Observable inputs might change dynamically, and often they haven't be supplied yet at the point you're subscribing
