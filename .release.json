@@ -9,9 +9,5 @@
   "tagName": "%s",
   "tagAnnotation": "Release %s",
   "buildCommand": "npm run-script prepublish",
-  "distRepo": "git@github.com:blesh/RxEmber.git",
-  "distStageDir": "tmp/stage",
-  "distBase": "dist",
-  "distFiles": ["**/*", "../package.json", "../bower.json"],
   "publish": false
 }
