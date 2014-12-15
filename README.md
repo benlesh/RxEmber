@@ -168,7 +168,7 @@ foos: rxPropertyChange('foo'),
 			tick: n,
 			dt: Date.now()
 		};
-  }),
+	}),
 ```
 
 this is equivalent to:
