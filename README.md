@@ -23,7 +23,7 @@ helpers with other Ember Object types, you will need to ensure
 Basic usage might look something like this:
 
 ```js
-App.ClockComponent = Ember.Component.extend({
+App.MyClockComponent = Ember.Component.extend({
   ticks: Rx.Observable.interval(1000),
 
   times: RxEmber.map('ticks', function() {
