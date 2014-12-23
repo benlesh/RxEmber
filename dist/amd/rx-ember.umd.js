@@ -22,6 +22,8 @@ define(
     rxAction = rx$ember$$["rxAction"];
     var rxPropertyChanges;
     rxPropertyChanges = rx$ember$$["rxPropertyChanges"];
+    var bindTo;
+    bindTo = rx$ember$$["bindTo"];
 
     var RxEmber = {
         RxBindings: RxBindings,
@@ -30,7 +32,8 @@ define(
         rxFilter: rxFilter,
         rxScan: rxScan,
         rxAction: rxAction,
-        rxPropertyChanges: rxPropertyChanges
+        rxPropertyChanges: rxPropertyChanges,
+      bindTo: bindTo
     };
 
     /* global define:true module:true window: true */

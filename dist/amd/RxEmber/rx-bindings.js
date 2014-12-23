@@ -19,7 +19,7 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
     rxBindings: null,
 
     /**
-      An event hook that will be called just before the subscriptions to 
+      An event hook that will be called just before the subscriptions to
       the rxBinding observables are made.
       @property willSubscribe
       @type Function
@@ -28,14 +28,14 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
     willSubscribe: noop,
 
     /**
-      An event hook that will be called just after the subscriptions to 
+      An event hook that will be called just after the subscriptions to
       the rxBinding observables are made.
       @property didSubscribe
       @type Function
       @default noop
     */
     didSubscribe: noop,
-    
+
     /**
       An event hook that will be called just prior to disposing subscriptions
       @property willDispose
@@ -43,7 +43,7 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
       @default noop
     */
     willDispose: noop,
-    
+
     /**
       An event hook that will be called just after disposing subscriptions
       @property didSubscribe
@@ -51,7 +51,7 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
       @default noop
     */
     didDispose: noop,
-    
+
     /**
       An composite disposable that can dispose of all subscriptions made
       via `subscribeTo`
@@ -60,7 +60,7 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
       @default null
     */
     instanceDisposable: null,
-    
+
     /**
       Subscribes to the observable passed and adds the subscription disposable to the composite
       diposable for the instance (`instanceDisposable`)
@@ -91,7 +91,7 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
       this.instanceDisposable = null;
       this.didDispose.apply(this);
     },
-    
+
     //TODO: better explanation of config object.
     /**
       Creates a subscription from the source (observable) property, to update the target property
@@ -109,8 +109,8 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
 
       if(typeof target === 'string') {
         key = target;
-        nextFn = function(d) { 
-          this.set(key, d); 
+        nextFn = function(d) {
+          this.set(key, d);
         };
       }
 
@@ -138,7 +138,11 @@ define("RxEmber/rx-bindings", ["exports"], function(__exports__) {
         }, this);
       }
       this.didSubscribe.apply(this);
-    }
+    },
+
+    _deprecateRxBindings: function(){
+      Ember.deprecate('RxBindings Mixin is deprecated. Use RxEmber.bindTo instead');
+    }.on('init')
   }));
 });
 

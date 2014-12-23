@@ -14,7 +14,7 @@
       rxBindings: null,
 
       /**
-        An event hook that will be called just before the subscriptions to 
+        An event hook that will be called just before the subscriptions to
         the rxBinding observables are made.
         @property willSubscribe
         @type Function
@@ -23,14 +23,14 @@
       willSubscribe: $$RxEmber$rx$bindings$$noop,
 
       /**
-        An event hook that will be called just after the subscriptions to 
+        An event hook that will be called just after the subscriptions to
         the rxBinding observables are made.
         @property didSubscribe
         @type Function
         @default noop
       */
       didSubscribe: $$RxEmber$rx$bindings$$noop,
-      
+
       /**
         An event hook that will be called just prior to disposing subscriptions
         @property willDispose
@@ -38,7 +38,7 @@
         @default noop
       */
       willDispose: $$RxEmber$rx$bindings$$noop,
-      
+
       /**
         An event hook that will be called just after disposing subscriptions
         @property didSubscribe
@@ -46,7 +46,7 @@
         @default noop
       */
       didDispose: $$RxEmber$rx$bindings$$noop,
-      
+
       /**
         An composite disposable that can dispose of all subscriptions made
         via `subscribeTo`
@@ -55,7 +55,7 @@
         @default null
       */
       instanceDisposable: null,
-      
+
       /**
         Subscribes to the observable passed and adds the subscription disposable to the composite
         diposable for the instance (`instanceDisposable`)
@@ -86,7 +86,7 @@
         this.instanceDisposable = null;
         this.didDispose.apply(this);
       },
-      
+
       //TODO: better explanation of config object.
       /**
         Creates a subscription from the source (observable) property, to update the target property
@@ -104,8 +104,8 @@
 
         if(typeof target === 'string') {
           key = target;
-          nextFn = function(d) { 
-            this.set(key, d); 
+          nextFn = function(d) {
+            this.set(key, d);
           };
         }
 
@@ -133,8 +133,53 @@
           }, this);
         }
         this.didSubscribe.apply(this);
-      }
+      },
+
+      _deprecateRxBindings: function(){
+        Ember.deprecate('RxBindings Mixin is deprecated. Use RxEmber.bindTo instead');
+      }.on('init')
     });
+
+    /*globals Rx, Ember*/
+
+    /**
+      A set of helpers for wiring up Ember objects and observables
+        @module rx-helpers
+    */
+
+    /**
+      Wires up an action to feed an observable property.
+
+      ### Example
+
+            Ember.ObjectController.extend(RxBindings, {
+              rxBindings: {
+                'fooClickTallies': 'fooClickTally'
+              },
+
+              actions: {
+                'fooClick': rxAction('fooClicks'),
+              },
+
+              fooClicks: rxInput(),
+
+              fooClickTallies: rxScan('fooClicks', 0, function(inc) {
+                return inc++;
+              }),
+
+              fooClickTally: 0,
+            });
+
+
+            <button {{action 'fooClicks'}}>foo {{fooClickTally}}</button>
+
+      @method rxAction
+      @param outputProperty {string} the name of the observable (rxInput) property to feed.
+      @return {Function}
+    */
+
+    var $$RxEmber$rx$helpers$$get = Ember.get;
+    var $$RxEmber$rx$helpers$$set = Ember.set;
 
     function $$RxEmber$rx$helpers$$rxAction(outputProperty) {
       var subject;
@@ -154,17 +199,17 @@
     function $$RxEmber$rx$helpers$$rxInput() {
       var uuid = $$RxEmber$rx$helpers$$backingUUID++;
       var backingField = '_rxInput_' + uuid;
-      
+
       return function(key, val){
         if(!this[backingField]) {
           this[backingField] = new Rx.BehaviorSubject(Rx.Observable.empty());
-        }    
-        
+        }
+
         if(arguments.length > 1) {
           var next = val && val instanceof Rx.Observable ? val : Rx.Observable.empty();
           this[backingField].onNext(next);
         }
-          
+
         return this[backingField]['switch']();
       }.property();
     }
@@ -194,9 +239,9 @@
           var fn = function() {
             observer.onNext(this.get(propName));
           }.bind(this);
-          
+
           this.addObserver(propName, fn);
-          
+
           return function(){
             this.removeObserver(propName, fn);
           }.bind(this);
@@ -204,6 +249,40 @@
       }.property();
     }
 
+    function $$RxEmber$rx$helpers$$bindTo(sourcePropName) {
+      return function(key, value) {
+        var self = this;
+        var backingPropName = '_' + key;
+        var subscribedTo = backingPropName + '_observable';
+        var observable = this.get(sourcePropName);
+
+        if(this[subscribedTo] !== observable){
+          this[subscribedTo] = observable;
+          var backingDisposable = backingPropName + '_disposable';
+          var disposable = this[backingDisposable];
+
+          if(!disposable) {
+            disposable = this[backingDisposable] = new Rx.SerialDisposable();
+            this.on('willDestroy', function() {
+              disposable.dispose();
+            });
+          }
+
+          disposable.setDisposable(observable.subscribe(function(nextValue) {
+            self.set(key, nextValue);
+          }, function(err) {
+            console.error('Error binding property: %o', err);
+            self.set(key, undefined);
+          }));
+        }
+
+        if(arguments.length > 1) {
+          this[backingPropName] = value;
+        }
+
+        return this[backingPropName];
+      }.property(sourcePropName);
+    }
 
     var rx$ember$umd$$RxEmber = {
         RxBindings: $$RxEmber$rx$bindings$$default,
@@ -212,7 +291,8 @@
         rxFilter: $$RxEmber$rx$helpers$$rxFilter,
         rxScan: $$RxEmber$rx$helpers$$rxScan,
         rxAction: $$RxEmber$rx$helpers$$rxAction,
-        rxPropertyChanges: $$RxEmber$rx$helpers$$rxPropertyChanges
+        rxPropertyChanges: $$RxEmber$rx$helpers$$rxPropertyChanges,
+      bindTo: $$RxEmber$rx$helpers$$bindTo
     };
 
     /* global define:true module:true window: true */

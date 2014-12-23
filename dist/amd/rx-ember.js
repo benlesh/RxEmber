@@ -22,6 +22,8 @@ define(
     rxPropertyChanges = RxEmber$rx$helpers$$["rxPropertyChanges"];
     var rxAction;
     rxAction = RxEmber$rx$helpers$$["rxAction"];
+    var bindTo;
+    bindTo = RxEmber$rx$helpers$$["bindTo"];
     __es6_export__("RxBindings", RxBindings);
     __es6_export__("rxInput", rxInput);
     __es6_export__("rxMap", rxMap);
@@ -29,6 +31,7 @@ define(
     __es6_export__("rxScan", rxScan);
     __es6_export__("rxPropertyChanges", rxPropertyChanges);
     __es6_export__("rxAction", rxAction);
+    __es6_export__("bindTo", bindTo);
   }
 );
 

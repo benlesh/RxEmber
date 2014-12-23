@@ -1,4 +1,4 @@
-/* globals Ember, Rx, RxEmber */
+/* globals Ember, Rx, RxEmber, describe, it, spyOn */
 
 var rxInput 					= RxEmber.rxInput;
 var rxFilter 					= RxEmber.rxFilter;
@@ -6,6 +6,7 @@ var rxMap 						= RxEmber.rxMap;
 var rxScan 						= RxEmber.rxScan;
 var rxPropertyChanges = RxEmber.rxPropertyChanges;
 var rxAction 					= RxEmber.rxAction;
+var bindTo          = RxEmber.bindTo;
 
 describe('helpers', function(){
 	describe('rxInput', function(){
@@ -171,7 +172,7 @@ describe('helpers', function(){
 
 			var ctrl = FooController.create({});
 			var i = 0;
-			
+
 			ctrl.get('doSomethings').forEach(function(args) {
 				expect(args).toEqual(expectedResults[i++]);
 
@@ -191,6 +192,30 @@ describe('helpers', function(){
 			});
 		});
 	});
+
+  describe('bindTo', function(){
+    it('should bind to an observable in the specified property', function(){
+      var FooClass = Ember.Object.extend(Ember.Evented, {
+        things: function(){
+          return Rx.Observable.just('thing 1');
+        }.property(),
+
+        thing: bindTo('things'),
+      });
+
+      var foo = FooClass.create();
+
+      expect(foo.get('thing')).toBe('thing 1');
+      expect(typeof foo._thing_disposable).toBe('object');
+      expect(typeof foo._thing_disposable.dispose).toBe('function');
+      spyOn(foo._thing_disposable, 'dispose').and.callThrough();
+
+      foo.trigger('willDestroy');
+
+      expect(foo._thing_disposable.dispose).toHaveBeenCalled();
+    });
+
+  });
 });
 
 

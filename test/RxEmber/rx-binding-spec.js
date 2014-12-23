@@ -1,4 +1,4 @@
-/* globals Rx, Ember, RxEmber */
+/* globals Rx, Ember, RxEmber, describe, it, spyOn */
 
 var RxBindings = RxEmber.RxBindings;
 
@@ -55,4 +55,11 @@ describe('RxBindings', function(){
 
 		expect(foo.get('output')).toBe(2);
 	});
+
+  it('should be deprecated', function(){
+    var FooClass = Ember.Object.extend(RxBindings, {});
+    spyOn(Ember, 'deprecate');
+    FooClass.create();
+    expect(Ember.deprecate).toHaveBeenCalled();
+  });
 });
