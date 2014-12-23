@@ -60,7 +60,7 @@ myInputProperty: RxEmber.observable(),
 
 One common issue when trying to develop Ember components that expect Observables to be supplied to them is that 
 Observable inputs might change dynamically, and often they haven't be supplied yet at the point you're subscribing
-to them. 
+to them.
 
 A way to get around this is by having a property that returns a "switched" Observable. The technicals of this, is that
 you have an Observable of Observables, and you `.switch()` to the latest observable supplied.
@@ -87,7 +87,7 @@ myInputProperty: function(key, value) {
 
 ### RxEmber.action() helper
 
-The `RxEmber.action(prop)` helper can be used in conjunction with the `observable()` helper to convert any 
+The `RxEmber.action(prop)` helper can be used in conjunction with the `observable()` helper to convert any
 action in to an observable stream of inputs to your class.
 
 ```js
