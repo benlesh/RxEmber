@@ -24,6 +24,18 @@ define(
     rxPropertyChanges = rx$ember$$["rxPropertyChanges"];
     var bindTo;
     bindTo = rx$ember$$["bindTo"];
+    var action;
+    action = rx$ember$$["action"];
+    var observableFrom;
+    observableFrom = rx$ember$$["observableFrom"];
+    var scan;
+    scan = rx$ember$$["scan"];
+    var map;
+    map = rx$ember$$["map"];
+    var filter;
+    filter = rx$ember$$["filter"];
+    var observable;
+    observable = rx$ember$$["observable"];
 
     var RxEmber = {
         RxBindings: RxBindings,
@@ -33,7 +45,13 @@ define(
         rxScan: rxScan,
         rxAction: rxAction,
         rxPropertyChanges: rxPropertyChanges,
-      bindTo: bindTo
+      bindTo: bindTo,
+      action: action,
+      observableFrom: observableFrom,
+      scan: scan,
+      map: map,
+      filter: filter,
+      observable: observable
     };
 
     /* global define:true module:true window: true */

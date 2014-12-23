@@ -23,12 +23,12 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
             },
 
             actions: {
-              'fooClick': rxAction('fooClicks'),
+              'fooClick': action('fooClicks'),
             },
 
-            fooClicks: rxInput(),
+            fooClicks: observable(),
 
-            fooClickTallies: rxScan('fooClicks', 0, function(inc) {
+            fooClickTallies: scan('fooClicks', 0, function(inc) {
               return inc++;
             }),
 
@@ -38,15 +38,15 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
 
           <button {{action 'fooClicks'}}>foo {{fooClickTally}}</button>
 
-    @method rxAction
-    @param outputProperty {string} the name of the observable (rxInput) property to feed.
+    @method action
+    @param outputProperty {string} the name of the observable (observable) property to feed.
     @return {Function}
   */
 
   var get = Ember.get;
   var set = Ember.set;
 
-  function rxAction(outputProperty) {
+  function action(outputProperty) {
     var subject;
 
     return function(){
@@ -59,13 +59,16 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
     };
   }
 
+  __es6_export__("action", action);
+  var rxAction = Ember.deprecateFunc('RxEmber.rxAction is deprecated, use RxEmber.action', action);
+
   __es6_export__("rxAction", rxAction);
 
   var backingUUID = 1;
 
-  function rxInput() {
+  function observable() {
     var uuid = backingUUID++;
-    var backingField = '_rxInput_' + uuid;
+    var backingField = '_observable_' + uuid;
 
     return function(key, val){
       if(!this[backingField]) {
@@ -81,30 +84,41 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
     }.property();
   }
 
+  __es6_export__("observable", observable);
+  var rxInput = Ember.deprecateFunc('RxEmber.rxInput is deprecated. Use RxEmber.observable');
 
   __es6_export__("rxInput", rxInput);
-  function rxMap(sourceProp, callback) {
+  function map(sourceProp, callback) {
       return function() {
           return this.get(sourceProp).map(callback.bind(this));
       }.property(sourceProp);
   }
 
+  __es6_export__("map", map);
+  var rxMap = Ember.deprecateFunc('RxEmber.rxMap is deprecated. Use RxEmber.map', map);
+
   __es6_export__("rxMap", rxMap);
-  function rxScan(sourceProp, start, callback) {
+  function scan(sourceProp, start, callback) {
     return function(){
       return this.get(sourceProp).scan(start, callback.bind(this));
     }.property(sourceProp);
   }
 
+  __es6_export__("scan", scan);
+  var rxScan = Ember.deprecateFunc('RxEmber.rxScan is deprecated. Use RxEmber.scan', scan);
+
   __es6_export__("rxScan", rxScan);
-  function rxFilter(sourceProp, callback) {
+  function filter(sourceProp, callback) {
     return function() {
       return this.get(sourceProp).filter(callback.bind(this));
     }.property(sourceProp);
   }
 
+  __es6_export__("filter", filter);
+  var rxFilter = Ember.deprecateFunc('RxEmber.rxFilter is deprecated. Use RxEmber.filter', filter);
+
   __es6_export__("rxFilter", rxFilter);
-  function rxPropertyChanges(propName) {
+  function observableFrom(propName) {
     return function(key, value) {
       return Rx.Observable.create(function(observer) {
         var fn = function() {
@@ -119,6 +133,9 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
       }.bind(this));
     }.property();
   }
+
+  __es6_export__("observableFrom", observableFrom);
+  var rxPropertyChanges = Ember.deprecateFunc('RxEmber.rxPropertyChanges is deprecated, use RxEmber.observableFrom', observableFrom);
 
   __es6_export__("rxPropertyChanges", rxPropertyChanges);
   function bindTo(sourcePropName) {

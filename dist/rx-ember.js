@@ -158,12 +158,12 @@
               },
 
               actions: {
-                'fooClick': rxAction('fooClicks'),
+                'fooClick': action('fooClicks'),
               },
 
-              fooClicks: rxInput(),
+              fooClicks: observable(),
 
-              fooClickTallies: rxScan('fooClicks', 0, function(inc) {
+              fooClickTallies: scan('fooClicks', 0, function(inc) {
                 return inc++;
               }),
 
@@ -173,15 +173,15 @@
 
             <button {{action 'fooClicks'}}>foo {{fooClickTally}}</button>
 
-      @method rxAction
-      @param outputProperty {string} the name of the observable (rxInput) property to feed.
+      @method action
+      @param outputProperty {string} the name of the observable (observable) property to feed.
       @return {Function}
     */
 
     var $$RxEmber$rx$helpers$$get = Ember.get;
     var $$RxEmber$rx$helpers$$set = Ember.set;
 
-    function $$RxEmber$rx$helpers$$rxAction(outputProperty) {
+    function $$RxEmber$rx$helpers$$action(outputProperty) {
       var subject;
 
       return function(){
@@ -194,11 +194,13 @@
       };
     }
 
+    var $$RxEmber$rx$helpers$$rxAction = Ember.deprecateFunc('RxEmber.rxAction is deprecated, use RxEmber.action', $$RxEmber$rx$helpers$$action);
+
     var $$RxEmber$rx$helpers$$backingUUID = 1;
 
-    function $$RxEmber$rx$helpers$$rxInput() {
+    function $$RxEmber$rx$helpers$$observable() {
       var uuid = $$RxEmber$rx$helpers$$backingUUID++;
-      var backingField = '_rxInput_' + uuid;
+      var backingField = '_observable_' + uuid;
 
       return function(key, val){
         if(!this[backingField]) {
@@ -214,26 +216,33 @@
       }.property();
     }
 
+    var $$RxEmber$rx$helpers$$rxInput = Ember.deprecateFunc('RxEmber.rxInput is deprecated. Use RxEmber.observable');
 
-    function $$RxEmber$rx$helpers$$rxMap(sourceProp, callback) {
+    function $$RxEmber$rx$helpers$$map(sourceProp, callback) {
         return function() {
             return this.get(sourceProp).map(callback.bind(this));
         }.property(sourceProp);
     }
 
-    function $$RxEmber$rx$helpers$$rxScan(sourceProp, start, callback) {
+    var $$RxEmber$rx$helpers$$rxMap = Ember.deprecateFunc('RxEmber.rxMap is deprecated. Use RxEmber.map', $$RxEmber$rx$helpers$$map);
+
+    function $$RxEmber$rx$helpers$$scan(sourceProp, start, callback) {
       return function(){
         return this.get(sourceProp).scan(start, callback.bind(this));
       }.property(sourceProp);
     }
 
-    function $$RxEmber$rx$helpers$$rxFilter(sourceProp, callback) {
+    var $$RxEmber$rx$helpers$$rxScan = Ember.deprecateFunc('RxEmber.rxScan is deprecated. Use RxEmber.scan', $$RxEmber$rx$helpers$$scan);
+
+    function $$RxEmber$rx$helpers$$filter(sourceProp, callback) {
       return function() {
         return this.get(sourceProp).filter(callback.bind(this));
       }.property(sourceProp);
     }
 
-    function $$RxEmber$rx$helpers$$rxPropertyChanges(propName) {
+    var $$RxEmber$rx$helpers$$rxFilter = Ember.deprecateFunc('RxEmber.rxFilter is deprecated. Use RxEmber.filter', $$RxEmber$rx$helpers$$filter);
+
+    function $$RxEmber$rx$helpers$$observableFrom(propName) {
       return function(key, value) {
         return Rx.Observable.create(function(observer) {
           var fn = function() {
@@ -248,6 +257,8 @@
         }.bind(this));
       }.property();
     }
+
+    var $$RxEmber$rx$helpers$$rxPropertyChanges = Ember.deprecateFunc('RxEmber.rxPropertyChanges is deprecated, use RxEmber.observableFrom', $$RxEmber$rx$helpers$$observableFrom);
 
     function $$RxEmber$rx$helpers$$bindTo(sourcePropName) {
       return function(key, value) {
@@ -292,7 +303,13 @@
         rxScan: $$RxEmber$rx$helpers$$rxScan,
         rxAction: $$RxEmber$rx$helpers$$rxAction,
         rxPropertyChanges: $$RxEmber$rx$helpers$$rxPropertyChanges,
-      bindTo: $$RxEmber$rx$helpers$$bindTo
+      bindTo: $$RxEmber$rx$helpers$$bindTo,
+      action: $$RxEmber$rx$helpers$$action,
+      observableFrom: $$RxEmber$rx$helpers$$observableFrom,
+      scan: $$RxEmber$rx$helpers$$scan,
+      map: $$RxEmber$rx$helpers$$map,
+      filter: $$RxEmber$rx$helpers$$filter,
+      observable: $$RxEmber$rx$helpers$$observable
     };
 
     /* global define:true module:true window: true */

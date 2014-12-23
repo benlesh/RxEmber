@@ -1,18 +1,18 @@
 /* globals Ember, Rx, RxEmber, describe, it, spyOn */
 
-var rxInput 					= RxEmber.rxInput;
-var rxFilter 					= RxEmber.rxFilter;
-var rxMap 						= RxEmber.rxMap;
-var rxScan 						= RxEmber.rxScan;
-var rxPropertyChanges = RxEmber.rxPropertyChanges;
-var rxAction 					= RxEmber.rxAction;
+var observable 				= RxEmber.observable;
+var filter 			  	= RxEmber.filter;
+var map 					  = RxEmber.map;
+var scan 					  = RxEmber.scan;
+var observableFrom  = RxEmber.observableFrom;
+var action 					= RxEmber.action;
 var bindTo          = RxEmber.bindTo;
 
 describe('helpers', function(){
-	describe('rxInput', function(){
+	describe('observable', function(){
 		it('should always supply an observable', function(){
 			var FooClass = Ember.Object.extend({
-				input: rxInput()
+				input: observable()
 			});
 
 			var foo = FooClass.create();
@@ -22,7 +22,7 @@ describe('helpers', function(){
 
 		it('should always give the latest supplied observable and only require one subscription', function(done){
 			var FooClass = Ember.Object.extend({
-				input: rxInput()
+				input: observable()
 			});
 
 			var i = 0;
@@ -45,7 +45,7 @@ describe('helpers', function(){
 		});
 	});
 
-	describe('rxFilter', function(){
+	describe('filter', function(){
 		it('should filter another observable property', function(done){
 			var expectedResults = [2,4];
 
@@ -54,7 +54,7 @@ describe('helpers', function(){
 					return Rx.Observable.fromArray([1,2,3,4,5]);
 				}.property(),
 
-				filtered: rxFilter('source', function(n) {
+				filtered: filter('source', function(n) {
 					return n % 2 === 0;
 				}),
 			});
@@ -73,7 +73,7 @@ describe('helpers', function(){
 	});
 
 
-	describe('rxMap', function(){
+	describe('map', function(){
 		it('should map another observable property', function(done){
 			var expectedResults = ['a1', 'a2', 'a3', 'a4', 'a5'];
 
@@ -82,7 +82,7 @@ describe('helpers', function(){
 					return Rx.Observable.fromArray([1,2,3,4,5]);
 				}.property(),
 
-				mapped: rxMap('source', function(n) {
+				mapped: map('source', function(n) {
 					return 'a' + n;
 				}),
 			});
@@ -101,7 +101,7 @@ describe('helpers', function(){
 	});
 
 
-	describe('rxScan', function(){
+	describe('scan', function(){
 		it('should perform a scan on another observable property', function(done){
 			var expectedResults = [1, 3, 6, 10, 15];
 
@@ -110,7 +110,7 @@ describe('helpers', function(){
 					return Rx.Observable.fromArray([1,2,3,4,5]);
 				}.property(),
 
-				accumulated: rxScan('source', 0, function(acc, n) {
+				accumulated: scan('source', 0, function(acc, n) {
 					return acc + n;
 				}),
 			});
@@ -128,14 +128,14 @@ describe('helpers', function(){
 		});
 	});
 
-	describe('rxPropertyChanges', function() {
+	describe('observableFrom', function() {
 		it('should observe property changes and emit them via an observable', function(done) {
 			var expectedResults = ['Ben', 'Jeff', 'Ranjit'];
 
 			var FooClass = Ember.Object.extend({
 				name: null,
 
-				names: rxPropertyChanges('name'),
+				names: observableFrom('name'),
 			});
 
 			var foo = FooClass.create();
@@ -154,8 +154,8 @@ describe('helpers', function(){
 		});
 	});
 
-	describe('rxAction', function(){
-		it('should create an observable of action arguments', function(done) {
+	describe('action', function(){
+    it('should create an observable of action arguments', function(done) {
 			var expectedResults = [
 				[1,2,3],
 				['foo', 'bar', 'baz'],
@@ -163,10 +163,10 @@ describe('helpers', function(){
 			];
 
 			var FooController = Ember.ObjectController.extend({
-				doSomethings: rxInput(),
+				doSomethings: observable(),
 
 				actions: {
-					doSomething: rxAction('doSomethings')
+					doSomething: action('doSomethings')
 				}
 			});
 
