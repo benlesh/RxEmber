@@ -16,8 +16,8 @@ bower install -S rx-ember
 
 ## Basic Usage
 
-RxEmber is meant to be used with Components. If you do use RxEmber
-helpers with other Ember Object types, you will need to ensure
+`RxEmber.bindTo` is meant to be used with Components. If you do use the
+RxEmber bindTo helper with other Ember Object types, you will need to ensure
 `.destroy()` is called on those objects.
 
 Basic usage might look something like this:
