@@ -26,7 +26,7 @@ The most important helper, though, is `RxEmber.bindTo`.
 `Ember.bindTo` will set up a subscription to the observable in the
 property whose name you supply. Because it sets up a subscription, that
 subscription needs to be "disposed" of. The disposal is wired up to
-happen on `willDestroy` of the object. **`RxEmber.bindTo` is really meant
+happen on `willDestroy` of the object. **RxEmber.bindTo is really meant
 to be used with Components.** If you do use the RxEmber bindTo helper with
 other Ember Object types, you will need to ensure `.destroy()` is called on
 those objects.
@@ -58,6 +58,40 @@ The time is: {{time}}
 RxEmber features several helper methods for setting up properties that are Observables or making Actions or property changes into
 Observables.
 
+### RxEmber.bindTo() helper
+
+As stated above, `RxEmber.bindTo` is probably the most important helper.
+What it does is:
+
+1. Subcribe to the observable in the property name provided.
+2. Manage that subscription (i.e. if the observable property changes,
+   re-subscribe)
+3. Set up a `willDestroy` event that will dispose of the subscription.
+
+As such, it is very important that all objects using the bindTo helper
+are destroyed.
+
+**It's recommended that RxEmber.bindTo() is used with
+Ember.Components!** Ember components and views are destroyed when not
+rendered, and will automatically dispose of the subscriptions.
+**Otherwise destroy() must be manually called**.
+
+```js
+App.FooBarComponent = Ember.Component.extend({
+  // an observable to subscribe to
+  foos: Rx.Observable.just('bar'),
+
+  // a property that is bound to the output of our observable
+  // on the property `foos`.
+  foo: RxEmber.bindTo('foos'),
+});
+```
+
+and the template:
+
+```hbs
+This will say "bar": {{foo}}
+```
 
 ### RxEmber.observable() helper
 
@@ -67,6 +101,7 @@ that uses `observable()`.
 ```js
 myInputProperty: RxEmber.observable(),
 ```
+
 **Why is this used?**
 
 One common issue when trying to develop Ember components that expect Observables to be supplied to them is that
