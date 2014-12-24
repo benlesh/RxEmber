@@ -14,11 +14,22 @@ bower install -S rx-ember
 ```
 
 
-## Basic Usage
+## Basics
 
-`RxEmber.bindTo` is meant to be used with Components. If you do use the
-RxEmber bindTo helper with other Ember Object types, you will need to ensure
-`.destroy()` is called on those objects.
+RxEmber helpers are used to create and manipulate observables on an
+Ember object. This is generally done by creating computed properties
+that contain observables, and then chaining them together with other
+computed properties that return observables.
+
+The most important helper, though, is `RxEmber.bindTo`.
+
+`Ember.bindTo` will set up a subscription to the observable in the
+property whose name you supply. Because it sets up a subscription, that
+subscription needs to be "disposed" of. The disposal is wired up to
+happen on `willDestroy` of the object. **`RxEmber.bindTo` is really meant
+to be used with Components.** If you do use the RxEmber bindTo helper with
+other Ember Object types, you will need to ensure `.destroy()` is called on
+those objects.
 
 Basic usage might look something like this:
 
