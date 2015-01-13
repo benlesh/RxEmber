@@ -195,7 +195,7 @@ describe('helpers', function(){
 
   describe('bindTo', function(){
     it('should bind to an observable in the specified property', function(){
-      var FooClass = Ember.Object.extend(Ember.Evented, {
+      var FooClass = Ember.Object.extend({
         things: function(){
           return Rx.Observable.just('thing 1');
         }.property(),
@@ -204,17 +204,17 @@ describe('helpers', function(){
       });
 
       var foo = FooClass.create();
-
       expect(foo.get('thing')).toBe('thing 1');
       expect(typeof foo._thing_disposable).toBe('object');
       expect(typeof foo._thing_disposable.dispose).toBe('function');
       spyOn(foo._thing_disposable, 'dispose').and.callThrough();
 
-      foo.trigger('willDestroy');
+      Ember.run(function(){
+	      foo.destroy();
+	    });
 
       expect(foo._thing_disposable.dispose).toHaveBeenCalled();
     });
-
   });
 });
 

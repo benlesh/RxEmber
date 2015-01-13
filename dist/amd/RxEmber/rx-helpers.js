@@ -152,9 +152,14 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
 
         if(!disposable) {
           disposable = this[backingDisposable] = new Rx.SerialDisposable();
-          this.on('willDestroy', function() {
+          var willDestroy = this.willDestroy;
+
+          this.willDestroy = function() {
             disposable.dispose();
-          });
+            if(willDestroy) {
+              return willDestroy.apply(this, arguments);
+            }
+          };
         }
 
         disposable.setDisposable(observable.subscribe(function(nextValue) {
