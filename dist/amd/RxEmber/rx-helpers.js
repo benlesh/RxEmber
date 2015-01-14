@@ -63,14 +63,9 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
   var rxAction = Ember.deprecateFunc('RxEmber.rxAction is deprecated, use RxEmber.action', action);
 
   __es6_export__("rxAction", rxAction);
-
-  var backingUUID = 1;
-
   function observable() {
-    var uuid = backingUUID++;
-    var backingField = '_observable_' + uuid;
-
     return function(key, val){
+      var backingField = '_' + key;
       if(!this[backingField]) {
         this[backingField] = new Rx.BehaviorSubject(Rx.Observable.empty());
       }
