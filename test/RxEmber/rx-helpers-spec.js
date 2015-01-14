@@ -152,6 +152,30 @@ describe('helpers', function(){
 			foo.set('name', 'Jeff');
 			foo.set('name', 'Ranjit');
 		});
+
+		it('should support array.[] observation', function() {
+			var expectedResults = [['wokka'], ['wokka', 'foo'], ['wokka', 'foo', 'bar']];
+
+			var FooClass = Ember.Object.extend({
+				stuff: [],
+
+				names: observableFrom('stuff.[]'),
+			});
+
+			var foo = FooClass.create();
+			var i = 0;
+
+			foo.get('stuff').forEach(function(x) {
+				expect(x).toEqual(expectedResults[i++]);
+				if(i === expectedResults.length) {
+					done();
+				}
+			});
+
+			foo.set('stuff', ['wokka']);
+			foo.get('stuff').pushObject('foo');
+			foo.get('stuff').pushObject('bar');
+		});
 	});
 
 	describe('action', function(){

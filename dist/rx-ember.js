@@ -239,10 +239,16 @@
     var $$RxEmber$rx$helpers$$rxFilter = Ember.deprecateFunc('RxEmber.rxFilter is deprecated. Use RxEmber.filter', $$RxEmber$rx$helpers$$filter);
 
     function $$RxEmber$rx$helpers$$observableFrom(propName) {
+      var arrIndex = propName.indexOf('.[]');
+      var prop = propName;
+      if(arrIndex !== -1) {
+        prop = propName.substring(0, arrIndex);
+      }
+
       return function(key, value) {
         return Rx.Observable.create(function(observer) {
           var fn = function() {
-            observer.onNext(this.get(propName));
+            observer.onNext(this.get(prop));
           }.bind(this);
 
           this.addObserver(propName, fn);
