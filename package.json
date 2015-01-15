@@ -1,6 +1,6 @@
 {
   "name": "RxEmber",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "repository": "https://github.com/blesh/RxEmber.git",
   "description": "Helpers for RxJS and EmberJS integration",
   "main": "index.js",
