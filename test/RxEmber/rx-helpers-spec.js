@@ -32,7 +32,8 @@ describe('helpers', function(){
 				input: Rx.Observable.fromArray([23, 42]),
 			});
 
-			foo.get('input').forEach(function(x) {
+			var subscription = foo.get('input').forEach(function(x) {
+				console.log(expect);
 				expect(x).toBe(expectedResults[i++]);
 
 				if(i === expectedResults.length) {
@@ -41,58 +42,6 @@ describe('helpers', function(){
 			});
 
 			foo.set('input', Rx.Observable.fromArray(['banana', 'stand']));
-		});
-
-		describe('when called with arguments', function(){
-			it('should use the first argument as a factory to create the initial observable', function(done){
-				var FooClass = Ember.Object.extend({
-					numbers: observable(function() {
-						return Rx.Observable.fromArray([1,2,3]);
-					}),
-				});
-
-				var foo = FooClass.create({});
-				var expectedResults = [1,2,3];
-				var i = 0;
-				foo.get('numbers').subscribe(function(n) {
-					expect(n).toBe(expectedResults[i++]);
-
-					if(i === expectedResults.length) {
-						done();
-					}
-				});
-			});
-
-			it('should use the remaining arguments to set up Ember CP dependencies', function(done) {
-				var FooClass = Ember.Object.extend({
-					numbers: observable(function() {
-						return Rx.Observable.fromArray([this.get('foo'), this.get('bar')]);
-					}, 'foo', 'bar'),
-
-					foo: 'foo 1',
-
-					bar: 'bar 1'
-				});
-
-				var foo = FooClass.create({});
-				var expectedResults = ['foo 1', 'bar 1', 'foo 2', 'bar 2'];
-				var i = 0;
-
-				setTimeout(function() {
-					Ember.run(function(){
-						foo.set('foo', 'foo 2');
-						foo.set('bar', 'bar 2');
-					});
-				}, 0);
-
-				foo.get('numbers').subscribe(function(n) {
-					expect(n).toBe(expectedResults[i++]);
-
-					if(i === expectedResults.length) {
-						done();
-					}
-				});
-			});
 		});
 	});
 

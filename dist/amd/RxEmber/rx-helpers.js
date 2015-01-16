@@ -63,41 +63,11 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
   var rxAction = Ember.deprecateFunc('RxEmber.rxAction is deprecated, use RxEmber.action', action);
 
   __es6_export__("rxAction", rxAction);
-  function observable(funcOrObservable) {
-    var factory = Rx.Observable.empty;
-    var deps;
-    if(arguments.length > 0) {
-      if(funcOrObservable instanceof Rx.Observable) {
-        factory = function(){
-          return funcOrObservable;
-        }
-      }
-      else if(typeof funcOrObservable === 'function') {
-        factory = funcOrObservable;
-      }
-
-      if(arguments.length > 1) {
-        deps = [].slice.call(arguments, 1);
-      }
-    }
-
+  function observable() {
     return function(key, val){
       var backingField = '_' + key;
-
       if(!this[backingField]) {
-        this[backingField] = new Rx.BehaviorSubject(factory.call(this));
-
-        if(deps) {
-          var handler = function(){
-            this[backingField].onNext(factory.call(this));
-          };
-          
-          deps.forEach(function(dep) {
-            this.addObserver(dep, this, function(){
-              Ember.run.once(this, handler);
-            });
-          }, this);
-        }
+        this[backingField] = new Rx.BehaviorSubject(Rx.Observable.empty());
       }
 
       if(arguments.length > 1) {
