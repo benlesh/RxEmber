@@ -102,6 +102,36 @@ describe('helpers', function(){
 				foo.set('bar', 'ever');
 			});
 		});
+
+
+		it('should handle property names with .[] in them', function(done){
+			var FooClass = Ember.Object.extend({
+				testStream: computedObservable(function(deps) {
+					return deps.foo.join(',') + ',' +  deps.bar;
+				}, 'foo.[]', 'bar'),
+
+				foo: ['foo'],
+
+				bar: 'bar'
+			});
+
+			var foo = FooClass.create();
+			var i = 0;
+			var expectedResults = ['foo,bar', 'foo,what,ever'];
+
+			foo.get('testStream').forEach(function(d) {
+				expect(d).toBe(expectedResults[i++]);
+
+				if(i === expectedResults.length) {
+					done();
+				}
+			});
+
+			Ember.run(function(){
+				foo.get('foo').pushObject('what');
+				foo.set('bar', 'ever');
+			});
+		});
 	});
 
 	describe('map', function(){

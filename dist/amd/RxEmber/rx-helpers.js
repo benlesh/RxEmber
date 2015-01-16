@@ -93,10 +93,15 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
     return function(key, value) {
       var backingField = '_' + key;
       if(!this[backingField]) {
-        this[backingField] = new Rx.BehaviorSubject(this.getProperties.apply(this, deps));
+        var depProps = deps.map(function(k) {
+          var arrayIndex = k.indexOf('.[]');
+          return arrayIndex !== -1 ? k.substring(0, arrayIndex) : k;
+        });
+        
+        this[backingField] = new Rx.BehaviorSubject(this.getProperties.apply(this, depProps));
         
         var handler = function(){
-          var props = this.getProperties.apply(this, deps);
+          var props = this.getProperties.apply(this, depProps);
           this[backingField].onNext(props);
         };
 
