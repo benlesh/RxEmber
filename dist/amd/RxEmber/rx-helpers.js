@@ -112,7 +112,7 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
         }, this);
       }
 
-      return this[backingField].map(mapFn);
+      return mapFn(this[backingField].asObservable());
     }.property();
   }
 

@@ -77,7 +77,9 @@ describe('helpers', function(){
 		it('should create an observable mapped from a stream of dependency changes', function(done){
 			var FooClass = Ember.Object.extend({
 				testStream: computedObservable(function(deps) {
-					return deps.foo + deps.bar;
+					return deps.map(function(d) {
+						return d.foo + d.bar;
+					});
 				}, 'foo', 'bar'),
 
 				foo: 'foo',
@@ -107,7 +109,9 @@ describe('helpers', function(){
 		it('should handle property names with .[] in them', function(done){
 			var FooClass = Ember.Object.extend({
 				testStream: computedObservable(function(deps) {
-					return deps.foo.join(',') + ',' +  deps.bar;
+					return deps.map(function(d) {
+						return d.foo.join(',') + ',' +  d.bar;
+					});
 				}, 'foo.[]', 'bar'),
 
 				foo: ['foo'],

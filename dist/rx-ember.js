@@ -243,7 +243,7 @@
           }, this);
         }
 
-        return this[backingField].map(mapFn);
+        return mapFn(this[backingField].asObservable());
       }.property();
     }
 
