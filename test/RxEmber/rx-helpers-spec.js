@@ -7,6 +7,7 @@ var scan 					  = RxEmber.scan;
 var observableFrom  = RxEmber.observableFrom;
 var action 					= RxEmber.action;
 var bindTo          = RxEmber.bindTo;
+var computedObservable = RxEmber.computedObservable;
 
 describe('helpers', function(){
 	describe('observable', function(){
@@ -72,6 +73,36 @@ describe('helpers', function(){
 		});
 	});
 
+	describe('computedObservable', function(){
+		it('should create an observable mapped from a stream of dependency changes', function(done){
+			var FooClass = Ember.Object.extend({
+				testStream: computedObservable(function(deps) {
+					return deps.foo + deps.bar;
+				}, 'foo', 'bar'),
+
+				foo: 'foo',
+
+				bar: 'bar'
+			});
+
+			var foo = FooClass.create();
+			var i = 0;
+			var expectedResults = ['foobar', 'whatever'];
+
+			foo.get('testStream').forEach(function(d) {
+				expect(d).toBe(expectedResults[i++]);
+
+				if(i === expectedResults.length) {
+					done();
+				}
+			});
+
+			Ember.run(function(){
+				foo.set('foo', 'what');
+				foo.set('bar', 'ever');
+			});
+		});
+	});
 
 	describe('map', function(){
 		it('should map another observable property', function(done){

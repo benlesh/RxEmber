@@ -83,6 +83,35 @@ define("RxEmber/rx-helpers", ["exports"], function(__exports__) {
   var rxInput = Ember.deprecateFunc('RxEmber.rxInput is deprecated. Use RxEmber.observable');
 
   __es6_export__("rxInput", rxInput);
+  function computedObservable(mapFn, deps) {
+    if(arguments.length > 1) {
+      deps = !Array.isArray(deps) ? [].slice.call(arguments, 1) : deps;
+    } else {
+      deps = [];
+    }
+
+    return function(key, value) {
+      var backingField = '_' + key;
+      if(!this[backingField]) {
+        this[backingField] = new Rx.BehaviorSubject(this.getProperties.apply(this, deps));
+        
+        var handler = function(){
+          var props = this.getProperties.apply(this, deps);
+          this[backingField].onNext(props);
+        };
+
+        deps.forEach(function(depKey) {
+          this.addObserver(depKey, this, function(){
+            Ember.run.once(this, handler);
+          });
+        }, this);
+      }
+
+      return this[backingField].map(mapFn);
+    }.property();
+  }
+
+  __es6_export__("computedObservable", computedObservable);
   function map(sourceProp, callback) {
       return function() {
           return this.get(sourceProp).map(callback.bind(this));

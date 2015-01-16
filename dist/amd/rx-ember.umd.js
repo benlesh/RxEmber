@@ -36,6 +36,8 @@ define(
     filter = rx$ember$$["filter"];
     var observable;
     observable = rx$ember$$["observable"];
+    var computedObservable;
+    computedObservable = rx$ember$$["computedObservable"];
 
     var RxEmber = {
         RxBindings: RxBindings,
@@ -51,7 +53,8 @@ define(
       scan: scan,
       map: map,
       filter: filter,
-      observable: observable
+      observable: observable,
+      computedObservable: computedObservable
     };
 
     /* global define:true module:true window: true */

@@ -36,6 +36,8 @@ define(
     filter = RxEmber$rx$helpers$$["filter"];
     var observable;
     observable = RxEmber$rx$helpers$$["observable"];
+    var computedObservable;
+    computedObservable = RxEmber$rx$helpers$$["computedObservable"];
     __es6_export__("RxBindings", RxBindings);
     __es6_export__("rxInput", rxInput);
     __es6_export__("rxMap", rxMap);
@@ -50,6 +52,7 @@ define(
     __es6_export__("map", map);
     __es6_export__("filter", filter);
     __es6_export__("observable", observable);
+    __es6_export__("computedObservable", computedObservable);
   }
 );
 
