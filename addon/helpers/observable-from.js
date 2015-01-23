@@ -20,7 +20,7 @@
   @param propName {string} the name of the property to observe changes of
   @return Ember.ComputedProperty
 */
-export function observableFrom(propName) {
+export default function observableFrom(propName) {
   var arrIndex = propName.indexOf('.[]');
   var prop = propName;
   if(arrIndex !== -1) {
