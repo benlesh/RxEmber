@@ -4,7 +4,7 @@
     property to.
   @return {Ember.ComputedProperty}
 */
-export function bindTo(sourcePropName) {
+export default function bindTo(sourcePropName) {
   return function(key, value) {
     var self = this;
     var backingPropName = '_' + key;
