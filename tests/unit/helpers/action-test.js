@@ -1,7 +1,6 @@
 /* globals Rx */
 import Ember from 'ember';
-import action from 'ember-cli-rx/helpers/action';
-import observable from 'ember-cli-rx/helpers/observable';
+import { action, observable } from 'ember-cli-rx/helpers';
 
 module('helpers/action');
 
