@@ -10,7 +10,7 @@ import Ember from 'ember';
     dependent properties to include in the observed property changes passed to the mapping function.
   @return {Ember.ComputedProperty}
 */
-export function computedObservable(mapFn, deps) {
+export default function computedObservable(mapFn, deps) {
   if(arguments.length > 1) {
     deps = !Array.isArray(deps) ? [].slice.call(arguments, 1) : deps;
   } else {
