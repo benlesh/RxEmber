@@ -1,25 +1,12 @@
-# Ember-cli-rx
+# ember-cli-rx
 
-This README outlines the details of collaborating on this Ember addon.
+This addon provides helpers to integrate RxJS with Ember. More details soon.
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+From within your Ember CLI application (must be > 0.0.42), run the
+following:
 
-## Running
+    npm install --save-dev ember-cli-rx
+    ember generate ember-cli-rx
 
-* `ember server`
-* Visit your app at http://localhost:4200.
-
-## Running Tests
-
-* `ember test`
-* `ember test --server`
-
-## Building
-
-* `ember build`
-
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
