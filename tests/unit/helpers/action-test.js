@@ -4,6 +4,8 @@ import { action, observable } from 'ember-cli-rx/helpers';
 
 module('helpers/action');
 
+var run = Ember.run;
+
 test('it should create an observable of action arguments', function(){
 	stop();
 
@@ -32,13 +34,7 @@ test('it should create an observable of action arguments', function(){
 		}
 	});
 
-	Ember.run(function(){
-		ctrl.send('doSomething', 1, 2, 3);
-	});
-	Ember.run(function(){
-		ctrl.send('doSomething', 'foo', 'bar', 'baz');
-	});
-	Ember.run(function(){
-		ctrl.send('doSomething', 'Ocelot', 'buyer\'s', 'remorse');
-	});
+  run(ctrl, 'send', 'doSomething', 1, 2, 3);
+  run(ctrl, 'send', 'doSomething', 'foo', 'bar', 'baz');
+  run(ctrl, 'send', 'doSomething', 'Ocelot', 'buyer\'s', 'remorse');
 });
