@@ -21,7 +21,7 @@ Ember object. This is generally done by creating computed properties
 that contain observables, and then chaining them together with other
 computed properties that return observables.
 
-The most important helper, though, is `RxEmber.bindTo`.
+The most important helper, though, is `RxEmber.helpers.bindTo`.
 
 `Ember.bindTo` will set up a subscription to the observable in the
 property whose name you supply. Because it sets up a subscription, that
@@ -34,16 +34,16 @@ those objects.
 Basic usage might look something like this:
 
 ```js
+var bindTo = Ember.helpers.bindTo;
+
 App.MyClockComponent = Ember.Component.extend({
-  ticks: Rx.Observable.interval(1000),
+  times: Rx.Observable.interval(1000).map(function() {
+		var d = new Date();
+    return (d.getHours() % 12 || 12) + ':' + d.getMinutes() + ':' + 
+    	d.getSeconds() + ' ' + (d.getHours() >= 12 ? 'PM' : 'AM');
+	}),
 
-  times: RxEmber.map('ticks', function() {
-    var d = new Date();
-    return (d.getHours() % 12 || 12) + ':' + d.getMinutes() + ':' +
-d.getSeconds() + ' ' + (d.getHours() >= 12 ? 'PM' : 'AM');
-  }),
-
-  time: RxEmber.bindTo('times')
+  time: bindTo('times')
 });
 ```
 
@@ -58,15 +58,16 @@ The time is: {{time}}
 RxEmber features several helper methods for setting up properties that are Observables or making Actions or property changes into
 Observables.
 
-### RxEmber.bindTo() helper
+### RxEmber.helpers.bindTo(propName)
 
-As stated above, `RxEmber.bindTo` is probably the most important helper.
+As stated above, `RxEmber.helpers.bindTo` is probably the most important helper.
 What it does is:
 
 1. Subcribe to the observable in the property name provided.
-2. Manage that subscription (i.e. if the observable property changes,
+2. Schedule the emitted events on the Ember "action" queue.
+3. Manage that subscription (i.e. if the observable property changes,
    re-subscribe)
-3. Set up a `willDestroy` event that will dispose of the subscription.
+4. Set up disposable of the subscription to occur upon destruction of the object.
 
 As such, it is very important that all objects using the bindTo helper
 are destroyed.
@@ -77,13 +78,15 @@ rendered, and will automatically dispose of the subscriptions.
 **Otherwise destroy() must be manually called**.
 
 ```js
+var bindTo = RxEmber.helpers.bindTo;
+
 App.FooBarComponent = Ember.Component.extend({
   // an observable to subscribe to
   foos: Rx.Observable.just('bar'),
 
   // a property that is bound to the output of our observable
   // on the property `foos`.
-  foo: RxEmber.bindTo('foos'),
+  foo: bindTo('foos'),
 });
 ```
 
@@ -93,13 +96,13 @@ and the template:
 This will say "bar": {{foo}}
 ```
 
-### RxEmber.observable() helper
+### RxEmber.helpers.observable() helper
 
 Usually any observable input to your component or controller would come through a property
 that uses `observable()`.
 
 ```js
-myInputProperty: RxEmber.observable(),
+myInputProperty: RxEmber.helpers.observable(),
 ```
 
 **Why is this used?**
@@ -108,8 +111,8 @@ One common issue when trying to develop Ember components that expect Observables
 Observable inputs might change dynamically, and often they haven't be supplied yet at the point you're subscribing
 to them.
 
-A way to get around this is by having a property that returns a "switched" Observable. The technicals of this, is that
-you have an Observable of Observables, and you `.switch()` to the latest observable supplied.
+A way to get around this is by having a property that is an observable that switches to the 
+latest observable supplied to it.
 
 The code to duplicate the example above looks (somewhat) like this:
 
@@ -131,20 +134,20 @@ myInputProperty: function(key, value) {
 ```
 
 
-### RxEmber.action() helper
+### RxEmber.helper.action(propName) helper
 
-The `RxEmber.action(prop)` helper can be used in conjunction with the `observable()` helper to convert any
+`RxEmber.helper.action` can be used in conjunction with the `observable()` helper to convert any
 action in to an observable stream of inputs to your class.
 
 ```js
 // this is the observable we want to
 // stream our action through
 // Arguments are "nexted" in as an Array.
-clickStream: RxEmber.observable(),
+clickStream: RxEmber.helper.observable(),
 
 actions: {
   // this is the action we'll wire up in the view.
-	clicked: RxEmber.action('clickStream'),
+	clicked: RxEmber.helper.action('clickStream'),
 }
 ```
 
@@ -156,9 +159,9 @@ And here's the view:
 
 From there you can of course write out values using the `RxBindings` mixin.
 
-### RxEmber.observableFrom() helper
+### RxEmber.helpers.observableFrom(args) helper
 
-`RxEmber.observableFrom` converts observed changes to a property on an Ember object into
+`RxEmber.helpers.observableFrom` converts observed changes to a property on an Ember object into
 an Observable stream.
 
 ```js
@@ -166,75 +169,16 @@ an Observable stream.
 foo: 0,
 
 // an observable stream of changes to `foo`
-foos: RxEmber.observableFrom('foo'),
+foos: RxEmber.helper.observableFrom('foo'),
 ```
 
-### RxEmber.map() helper
+## Schedulers
 
-`RxEmber.map` is used to map one observable property into a new observable property. It's effectivelly
- a shorthand method.
+### RxEmber.schedulers.emberActionScheduler(target)
 
-```js
-intervalStream: function() {
-  return Rx.Observable.interval(1000),
-}.property(),
-
-ticks: RxEmber.map('intervalStream', function(n) {
-	return {
-		tick: n,
-		dt: Date.now()
-	};
-}),
-```
-
-this is equivalent to:
-
-```js
-	intervalStream: function() {
-		return Rx.Observable.interval(1000),
-	}.property(),
-
-	ticks: function() {
-		return this.get('intervalStream').map(function(n) {
-			return {
-				tick: n,
-				dt: Date.now()
-			};
-	  });
-	}.property('intervalStream'),
-```
-
-### RxEmber.filter() helper
-
-`RxEmber.filter` is used to filter one observable property into a new observable property. The semantics are
-similar to RxEmber.map
-
-```js
-	numbers: function(){
-		return Rx.Observable.fromArray([1,2,3,4,5]);
-	}.property(),
-
-	evens: RxEmber.filter('numbers', function(n) {
-		return n % 2 === 0;
-	}),
-```
+An Rx.Scheduler for scheduling an observable to emit as part of the Ember "actions" queue. The `target` is the Ember.Object to set as the target for the `Ember.run.schedule('actions', target, fn)` call.
 
 
-### RxEmber.scan() helper
+### RxEmber.schedulers.emberScheduler(queueName, target)
 
-`RxEmber.scan` is used to perform an RxJS "scan" on an observable and return a new observable. This is good
-for accumulating data and emitting that accumulation each "next".
-
-```js
-  // emits 1, 2, 3, 4, 5, ...
-	ticks: function(){
-		return Rx.Observable.interval(1000);
-	}.property(),
-
-  // emits 1, 3, 6, 10, 15, ...
-	accumulated: RxEmber.scan('ticks', 0, function(acc, n) {
-		acc += n;
-		return acc;
-	}),
-
-```
+An Rx.Scheduler for scheduling an observable to emit as part of the any Ember run queue. The `queueName` is the name of the queue you want to schedule the observable to emit on (e.g. "afterRender" or "actions"). The `target` is the Ember.Object to set as the target for the `Ember.run.schedule('actions', target, fn)` call.
