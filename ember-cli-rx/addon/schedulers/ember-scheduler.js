@@ -1,4 +1,4 @@
-import Ember from 'ember';
+/* globals Ember */ //HACK: because I'm sharing this with rx-ember
 
 var Scheduler = Rx.Scheduler;
 var SingleAssignmentDisposable = Rx.SingleAssignmentDisposable;

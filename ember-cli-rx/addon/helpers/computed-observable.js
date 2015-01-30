@@ -1,4 +1,4 @@
-import Ember from 'ember';
+/* globals Ember */ //HACK: because I'm sharing this with rx-ember
 
 /**
   Creates a a property that returns an observable which is created
