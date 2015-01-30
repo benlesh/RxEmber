@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/blesh/ember-cli-rx.svg?branch=master)](https://travis-ci.org/blesh/ember-cli-rx)
+
 # ember-cli-rx
 
 This addon provides helpers to integrate RxJS with Ember. More details soon.
