@@ -4,18 +4,20 @@ var Scheduler = Rx.Scheduler;
 var SingleAssignmentDisposable = Rx.SingleAssignmentDisposable;
 
 function scheduleNow(state, action) {
-	let disposable = new SingleAssignmentDisposable();
-	scheduleEmberAction(disposable, this._queue, this._target, state, action);
+	var scheduler = this;
+	var disposable = new SingleAssignmentDisposable();
+	scheduleEmberAction(disposable, this._queue, this._target, state, action, scheduler);
 	return disposable;
 }
 
 function scheduleRelative(state, dueTime, action) {
-	let dt = Scheduler.normalize(dueTime);
-	let disposable = new SingleAssignmentDisposable();
-	let target = this._target;
+	var dt = Scheduler.normalize(dueTime);
+	var disposable = new SingleAssignmentDisposable();
+	var target = this._target;
+	var scheduler = this;
 
-	setTimeout(() => {
-		scheduleEmberAction(disposable, this._queue, target, state, action);
+	setTimeout(function() {
+		scheduleEmberAction(disposable, this._queue, target, state, action, scheduler);
 	}, dt);
 
 	return disposable;
@@ -25,10 +27,10 @@ function scheduleAbsolute(state, dueTime, action) {
 	return this.scheduleWithRelativeAndState(state, dueTime - Date.now(), action);
 }
 
-function scheduleEmberAction(disposable, target, queue, state, action) {
-	Ember.run.schedule(queue, target, () => {
+function scheduleEmberAction(disposable, queue, target, state, action, scheduler) {
+	Ember.run.schedule(queue, target, function() {
 		if(!disposable.isDisposed) {
-			disposable.setDisposable(action(state));
+			disposable.setDisposable(action(scheduler, state));
 		}
 	});
 }
@@ -41,7 +43,7 @@ function scheduleEmberAction(disposable, target, queue, state, action) {
 	@return {Rx.Scheduler}
 */
 export default function emberScheduler(queue, target) {
-	let scheduler = new Scheduler(Date.now, scheduleNow, scheduleRelative, scheduleAbsolute);
+	var scheduler = new Scheduler(Date.now, scheduleNow, scheduleRelative, scheduleAbsolute);
 	scheduler._target = target;
 	scheduler._queue = queue;
 	return scheduler;
