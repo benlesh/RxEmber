@@ -9,4 +9,3 @@ following:
 
     npm install --save-dev ember-cli-rx
     ember generate ember-cli-rx
-
