@@ -22,7 +22,9 @@
     "bower_components",
     "test",
     "tests",
-    "tmp"
+    "tmp",
+    "ember-cli-rx",
+    "lib"
   ],
   "dependencies": {
     "ember": ">= 1.7.0 < 2.0.0",
