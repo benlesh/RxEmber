@@ -7,7 +7,7 @@
   "scripts": {
     "test": "testem ci -R dot",
     "build": "ember build",
-    "prepublish": "export EMBER_ENV=production && ember build"
+    "localCompile": "export EMBER_ENV=production && ember build"
   },
   "keywords": [
     "EmberJS",
