@@ -34,7 +34,7 @@ The most important helper, though, is `RxEmber.helpers.bindTo`.
 `Ember.bindTo` will set up a subscription to the observable in the
 property whose name you supply. Because it sets up a subscription, that
 subscription needs to be "disposed" of. The disposal is wired up to
-happen on `willDestroy` of the object. **RxEmber.bindTo is really meant
+happen on `willDestroy` of the object. **RxEmber.helpers.bindTo is really meant
 to be used with Components.** If you do use the RxEmber bindTo helper with
 other Ember Object types, you will need to ensure `.destroy()` is called on
 those objects.
