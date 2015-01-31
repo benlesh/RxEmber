@@ -8,6 +8,6 @@
   "commitMessage": "Release %s",
   "tagName": "%s",
   "tagAnnotation": "Release %s",
-  "buildCommand": "npm run-script prepublish",
+  "buildCommand": "ember build",
   "publish": false
 }
