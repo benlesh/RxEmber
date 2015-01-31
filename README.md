@@ -13,6 +13,14 @@ Via Bower:
 bower install -S rx-ember
 ```
 
+## Ember-CLI 
+
+http://github.com/blesh/ember-cli-rx
+
+An [Ember-CLI](http://www.ember-cli.com) version of this project is now available and is the project development
+is primarily done on. The RxEmber project (this one) exists mostly to create a "global" build of rx-ember for 
+non-Ember-CLI consumption.
+
 
 ## Basics
 
