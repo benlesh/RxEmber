@@ -157,7 +157,6 @@
           }
 
           disposable.setDisposable(observable.observeOn($$schedulers$ember$action$scheduler$$default(self)).subscribe(function(nextValue) {
-            console.debug('actually setting %s to %o', key, nextValue);
             self.set(key, nextValue);
           }, function(err) {
             console.error('Error binding property: %o', err);
