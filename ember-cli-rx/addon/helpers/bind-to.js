@@ -31,7 +31,6 @@ export default function bindTo(sourcePropName) {
       }
 
       disposable.setDisposable(observable.observeOn(emberActionScheduler(self)).subscribe(function(nextValue) {
-        console.debug('actually setting %s to %o', key, nextValue);
         self.set(key, nextValue);
       }, function(err) {
         console.error('Error binding property: %o', err);
