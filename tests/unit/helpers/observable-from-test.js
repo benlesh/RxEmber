@@ -3,14 +3,16 @@ import { observableFrom } from 'ember-cli-rx/helpers';
 
 module('helpers/observable-from');
 
-test('it should observe property changes and emit them via an observable', function() {
+function testObservableFromPropertyChanges(useComputedProperty) {
 	stop();
 	var expectedResults = ['Ben', 'Jeff', 'Ranjit'];
 
 	var FooClass = Ember.Object.extend({
 		name: null,
-
-		names: observableFrom('name'),
+    nameAlias: function() {
+      return this.get('name');
+    }.property('name'),
+		names: observableFrom(useComputedProperty ? 'nameAlias' : 'name'),
 	});
 
 	var foo = FooClass.create();
@@ -26,6 +28,14 @@ test('it should observe property changes and emit them via an observable', funct
 	foo.set('name', 'Ben');
 	foo.set('name', 'Jeff');
 	foo.set('name', 'Ranjit');
+}
+
+test('it should observe property changes and emit them via an observable (normal properties)', function() {
+  testObservableFromPropertyChanges(false);
+});
+
+test('it should observe property changes and emit them via an observable (computed properties)', function() {
+  testObservableFromPropertyChanges(true);
 });
 
 test('it should support array.[] observation', function() {
@@ -52,3 +62,4 @@ test('it should support array.[] observation', function() {
 	foo.get('stuff').pushObject('foo');
 	foo.get('stuff').pushObject('bar');
 });
+
