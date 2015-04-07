@@ -35,6 +35,10 @@ export default function observableFrom(propName) {
 
       this.addObserver(propName, fn);
 
+      // this eager consumption is necessary due to lazy CP optimization preventing
+      // observers from properly attaching unless the property is eagerly consumed
+      this.get(propName);
+
       return function(){
         this.removeObserver(propName, fn);
       }.bind(this);
