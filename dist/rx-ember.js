@@ -14,7 +14,7 @@
     }
     var $$helpers$action$$default = $$helpers$action$$action;
     function $$helpers$observable$$observable() {
-      return function(key, val){
+      return Ember.computed(function(key, val){
         var backingField = '_' + key;
         if(!this[backingField]) {
           this[backingField] = new Rx.BehaviorSubject(Rx.Observable.empty());
@@ -26,7 +26,7 @@
         }
 
         return this[backingField]['switch']();
-      }.property();
+      });
     }
     var $$helpers$observable$$default = $$helpers$observable$$observable;
     function $$helpers$computed$observable$$computedObservable(mapFn, deps) {
@@ -36,7 +36,7 @@
         deps = [];
       }
 
-      return function(key, value) {
+      return Ember.computed(function(key) {
         var backingField = '_' + key;
         if(!this[backingField]) {
           var depProps = deps.map(function(k) {
@@ -59,7 +59,7 @@
         }
 
         return mapFn(this[backingField].asObservable());
-      }.property();
+      });
     }
     var $$helpers$computed$observable$$default = $$helpers$computed$observable$$computedObservable;
     function $$helpers$observable$from$$observableFrom(propName) {
@@ -69,19 +69,24 @@
         prop = propName.substring(0, arrIndex);
       }
 
-      return function(key, value) {
+      return Ember.computed(function() {
+        var self = this;
         return Rx.Observable.create(function(observer) {
           var fn = function() {
-            observer.onNext(this.get(prop));
-          }.bind(this);
+            observer.onNext(self.get(prop));
+          };
 
-          this.addObserver(propName, fn);
+          self.addObserver(propName, fn);
+
+          // this eager consumption is necessary due to lazy CP optimization preventing
+          // observers from properly attaching unless the property is eagerly consumed
+          self.get(propName);
 
           return function(){
-            this.removeObserver(propName, fn);
-          }.bind(this);
-        }.bind(this));
-      }.property();
+            self.removeObserver(propName, fn);
+          };
+        });
+      });
     }
     var $$helpers$observable$from$$default = $$helpers$observable$from$$observableFrom;
     /* globals Ember */ //HACK: because I'm sharing this with rx-ember
@@ -133,7 +138,7 @@
     }
     var $$schedulers$ember$action$scheduler$$default = $$schedulers$ember$action$scheduler$$emberActionScheduler;
     function $$helpers$bind$to$$bindTo(sourcePropName) {
-      return function(key, value) {
+      return Ember.computed(sourcePropName, function(key, value) {
         var self = this;
         var backingPropName = '_' + key;
         var subscribedTo = backingPropName + '_observable';
@@ -169,7 +174,7 @@
         }
 
         return this[backingPropName];
-      }.property(sourcePropName);
+      });
     }
     var $$helpers$bind$to$$default = $$helpers$bind$to$$bindTo;
 
