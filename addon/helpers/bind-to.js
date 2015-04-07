@@ -1,3 +1,4 @@
+/* globals Ember */
 import emberActionScheduler from '../schedulers/ember-action-scheduler';
 
 /**
@@ -7,7 +8,7 @@ import emberActionScheduler from '../schedulers/ember-action-scheduler';
   @return {Ember.ComputedProperty}
 */
 export default function bindTo(sourcePropName) {
-  return function(key, value) {
+  return Ember.computed(sourcePropName, function(key, value) {
     var self = this;
     var backingPropName = '_' + key;
     var subscribedTo = backingPropName + '_observable';
@@ -43,5 +44,5 @@ export default function bindTo(sourcePropName) {
     }
 
     return this[backingPropName];
-  }.property(sourcePropName);
+  });
 }

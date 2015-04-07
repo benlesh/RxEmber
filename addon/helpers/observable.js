@@ -1,3 +1,5 @@
+/* globals Ember */
+
 /**
   Creates a property that accepts Rx.Observables
   and returns a single observable that represents the latest observable
@@ -9,7 +11,7 @@
   @return Ember.ComputedProperty
 */
 export default function observable() {
-  return function(key, val){
+  return Ember.computed(function(key, val){
     var backingField = '_' + key;
     if(!this[backingField]) {
       this[backingField] = new Rx.BehaviorSubject(Rx.Observable.empty());
@@ -21,5 +23,5 @@ export default function observable() {
     }
 
     return this[backingField]['switch']();
-  }.property();
+  });
 }

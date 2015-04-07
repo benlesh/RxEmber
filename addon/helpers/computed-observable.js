@@ -17,7 +17,7 @@ export default function computedObservable(mapFn, deps) {
     deps = [];
   }
 
-  return function(key, value) {
+  return Ember.computed(function(key) {
     var backingField = '_' + key;
     if(!this[backingField]) {
       var depProps = deps.map(function(k) {
@@ -40,5 +40,5 @@ export default function computedObservable(mapFn, deps) {
     }
 
     return mapFn(this[backingField].asObservable());
-  }.property();
+  });
 }

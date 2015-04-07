@@ -1,5 +1,3 @@
-/* globals Ember */ //HACK: because I'm sharing this with rx-ember
-
 /**
   Wires up an action to feed an observable property.
 

@@ -1,3 +1,5 @@
+/* globals Ember */
+
 /**
   Creates an observable from observed Ember property changes.
 
@@ -27,21 +29,22 @@ export default function observableFrom(propName) {
     prop = propName.substring(0, arrIndex);
   }
 
-  return function(key, value) {
+  return Ember.computed(function() {
+    var self = this;
     return Rx.Observable.create(function(observer) {
       var fn = function() {
-        observer.onNext(this.get(prop));
-      }.bind(this);
+        observer.onNext(self.get(prop));
+      };
 
-      this.addObserver(propName, fn);
+      self.addObserver(propName, fn);
 
       // this eager consumption is necessary due to lazy CP optimization preventing
       // observers from properly attaching unless the property is eagerly consumed
-      this.get(propName);
+      self.get(propName);
 
       return function(){
-        this.removeObserver(propName, fn);
-      }.bind(this);
-    }.bind(this));
-  }.property();
+        self.removeObserver(propName, fn);
+      };
+    });
+  });
 }
