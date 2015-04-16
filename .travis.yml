@@ -7,16 +7,14 @@ env:
   global:
   - EMBER_ENV=production
 
-cache:
-  directories:
-    - node_modules
-
 before_install:
   - "npm config set spin false"
   - "npm install -g npm@^2"
 
 install:
   - npm install -g bower
+  - npm cache clean
+  - bower cache clean
   - npm install
   - bower install
 
