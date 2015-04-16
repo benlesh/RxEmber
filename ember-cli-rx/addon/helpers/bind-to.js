@@ -14,6 +14,18 @@ export default function bindTo(sourcePropName) {
     var subscribedTo = backingPropName + '_observable';
     var observable = this.get(sourcePropName);
 
+    Ember.assert('Must be applied to components only', this instanceof Ember.Component);
+
+    if(!this._bindToDisposables) {
+      this._bindToDisposables = new Rx.CompositeDisposable();
+
+      Ember.addListener(this, 'willDestroyElement', this, function(){
+        if(this._bindToDisposables && !this._bindToDisposables.isDisposed) {
+          this._bindToDisposables.dispose();
+        }
+      });
+    }
+
     if(this[subscribedTo] !== observable){
       this[subscribedTo] = observable;
       var backingDisposable = backingPropName + '_disposable';
@@ -21,14 +33,7 @@ export default function bindTo(sourcePropName) {
 
       if(!disposable) {
         disposable = this[backingDisposable] = new Rx.SerialDisposable();
-        var willDestroy = this.willDestroy;
-
-        this.willDestroy = function() {
-          disposable.dispose();
-          if(willDestroy) {
-            return willDestroy.apply(this, arguments);
-          }
-        };
+        this._bindToDisposables.add(disposable);
       }
 
       disposable.setDisposable(observable.observeOn(emberActionScheduler(self)).subscribe(function(nextValue) {
