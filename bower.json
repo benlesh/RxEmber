@@ -17,7 +17,11 @@
   "license": "MIT",
   "homepage": "http://github.com/blesh/RxEmber",
   "ignore": [
-    "**/.*",
+    "Brocfile.js",
+    ".travis.yml",
+    ".release.json",
+    ".gitignore",
+    "testem.json",
     "node_modules",
     "bower_components",
     "test",
