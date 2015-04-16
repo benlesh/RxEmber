@@ -7,7 +7,7 @@ module('helpers/bind-to');
 test('it should bind to an observable in the specified property', function(){
   var subject = new Rx.Subject();
 
-  var FooClass = Ember.Object.extend({
+  var FooClass = Ember.Component.extend(Ember.Evented, {
     things: function(){
       return subject;
     }.property(),
@@ -38,17 +38,25 @@ test('it should bind to an observable in the specified property', function(){
 
   equal(typeof foo._thing_disposable, 'object', 'expect a disposable to be tracked on a private property');
 
-  var disposeCalled = false;
-  var dispose = foo._thing_disposable.dispose;
-  foo._thing_disposable.dispose = function(){
-  	disposeCalled = true;
-  	return dispose.apply(this, arguments);
-  };
+  equal(typeof foo._bindToDisposables, 'object', 'expect a composite disposable to have been registered');
 
   Ember.run(function(){
-    equal(disposeCalled, false, 'sanity check, dispose should not have been called yet');
-    foo.destroy();
+    foo.trigger('willDestroyElement');
   });
 
-  equal(disposeCalled, true, 'expect destroying the object to dispose of the disposable');
+  equal(foo._thing_disposable.isDisposed, true, 'expect disposal');
+});
+
+test('it should assert components only', function(){
+  var FooClass = Ember.Object.extend({
+    something: Rx.Observable.return(42),
+    whatever: bindTo('something')
+  });
+  
+  throws(function(){
+    Ember.run(function(){
+      var foo = FooClass.create();
+      foo.get('whatever');
+    });
+  }, 'Assertion Failed: Must be applied to components only');
 });
