@@ -1,3 +1,4 @@
+# *DEPRECATED: use [ember-cli-rx](https://github.com/blesh/ember-cli-rx) instead*
 RxEmber
 ==============
 
